@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">Solitar Exame</ui:define>
+
+    <ui:define name="viewname">Solicitar Exame</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#00acac', '#3e96e7'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>  
+        </script>
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+            .overflowTexto{
+                max-width: 40ch;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            @media screen and (max-width: 600px) {
+                .overflowTexto{
+                    width: 200px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g dashboard card ui-fluid">
+            <div class="ui-g-12">
+                <h:form id="form">
+                    <p:growl id="msg" showDetail="true"/>
+
+                    <h1>Solicitar exames</h1>
+
+                    <p:dataTable id="eventsDT" 
+                                 var="atendimento" 
+                                 value="#{triagemBean.atendimentos}" 
+                                 selectionMode="single" 
+                                 selection="#{triagemBean.atendimento}" 
+                                 rowKey="#{atendimento.id}"
+                                 emptyMessage="Nenhum atendimento para hoje."
+                                 rows="20"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="10,20,25,50">
+                        <f:facet name="header">
+                            Selecione um atendimento em andamento
+                        </f:facet>
+                        <p:ajax event="rowSelect" listener="#{triagemBean.onRowSelect}" oncomplete="PF('dlg').show()" update="form" />
+                        <!--<p:ajax event="rowUnselect" listener="# {triagemBean.onRowUnselect}" update="form" />-->
+
+                        <p:column filterBy="#{atendimento.id}" headerText="Atendimento">
+                            <h:outputText value="Nº #{atendimento.id}" />
+                        </p:column>
+                        <p:column filterBy="#{atendimento.animal.id}" headerText="Ficha">
+                            <h:outputText value="Nº #{atendimento.animal.id}" />
+                        </p:column>
+                        <p:column filterBy="#{atendimento.animal.nome}" headerText="Nome">
+                            <h:outputText value="#{atendimento.animal.nome}" />
+                        </p:column>
+                        <p:column filterBy="#{atendimento.proprietario.nome}" headerText="Proprietario">
+                            <h:outputText value="#{atendimento.proprietario.nome}" />
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:dialog header="Triagem do(a) #{triagemBean.atendimento.animal.nome}" widgetVar="dlg" modal="true">
+
+                        <h:panelGrid columns="2">
+
+                            <h:outputText value="Atendimento: " />
+                            <h:outputText value="Nº #{triagemBean.atendimento.id}" />
+                            <h:outputText value="Pet: " />
+                            <h:outputText value="#{triagemBean.atendimento.animal.nome}" />
+                            <p:outputLabel value="Tipo de exame:" for="dd" />
+                            <p:autoComplete id="dd" dropdown="true" value="#{autoCompleteView.txt6}" completeMethod="#{autoCompleteView.completeText}" />
+                            <h:outputText value="Custo" />
+                            <p:inputText value="" />
+                            <h:outputText value="Descrição : " />
+                            <p:inputTextarea rows="5" 
+                                             cols="30" 
+                                             counter="display" 
+                                             maxlength="500" 
+                                             counterTemplate="{0} caracteres restantes." 
+                                             autoResize="false" 
+                                             value="#{triagemBean.triagem.patologia}"/>
+                            <p:spacer/>
+                            <h:outputText id="display" />                            
+                            <p:spacer/> 
+
+                            <p:commandButton value="Registrar" 
+                                             action="#{triagemBean.registrarTriagem()}" 
+                                             ajax="false"/>
+                        </h:panelGrid>
+
+                    </p:dialog>
+
+                </h:form>
+
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

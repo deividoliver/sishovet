@@ -1,0 +1,127 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">Início</ui:define>
+
+    <ui:define name="viewname">Início</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#00acac', '#3e96e7'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>
+        </script>
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+            .overflowTexto{
+                max-width: 40ch;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            @media screen and (max-width: 600px) {
+                .overflowTexto{
+                    width: 200px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g dashboard card">
+
+
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g card overview-box overview-box-1">
+                    <div class="ui-g-4">
+                        <i class="fa fa-fw fa fa-paw"></i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="overview-box-count">#{estatisticaBean.quantidadeDeAnimais}</span>
+                        <span class="overview-box-name">Animais Cadastrados</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g card overview-box overview-box-2">
+                    <div class="ui-g-4">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="overview-box-count">#{estatisticaBean.quantidadeDeProprietarios}</span>
+                        <span class="overview-box-name">Proprietários</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+
+                <div class="ui-g card overview-box overview-box-3">
+                    <div class="ui-g-4">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="overview-box-count">#{estatisticaBean.quantidadeDeUsuarios}</span>
+                        <span class="overview-box-name">Usuários</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g card overview-box overview-box-4">
+                    <div class="ui-g-4">
+                        <i class="fa fa-user-md"></i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="overview-box-count">#{estatisticaBean.quantidadeDeMedicosAtivos}</span>
+                        <span class="overview-box-name">Médicos Ativos</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-12">
+                <div class="card">
+                    <p:panel header="Índice de atendimentos por mês neste ano">
+                        <p:chart type="line" model="#{estatisticaBean.atendimentosDoAnoMes}" responsive="true"/>
+                    </p:panel>
+                </div>
+            </div>
+
+
+
+        </div>
+    </ui:define>
+</ui:composition>

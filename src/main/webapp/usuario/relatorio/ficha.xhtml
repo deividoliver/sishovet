@@ -1,0 +1,245 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">Ficha do Animal</ui:define>
+
+    <ui:define name="viewname">Ficha do Animal</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#00acac', '#3e96e7'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>
+        </script>
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+            .overflowTexto{
+                max-width: 40ch;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            @media screen and (max-width: 600px) {
+                .overflowTexto{
+                    width: 200px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:growl id="msg" showDetail="true"/>
+
+        <div class="ui-g dashboard card ui-fluid">
+            <div class="ui-g-8 ui-g-nopad">
+                <h1>Ficha do Animal</h1>
+                <h:form id="form_pesquisa">
+                    <div class="ui-g-3">
+                        <p:outputLabel value="Ficha do Animal"/>
+                    </div>
+                    <div class="ui-g-5">
+                        <p:inputNumber value="#{relatorioBean.ficha}" decimalPlaces="0" />
+                    </div>
+                    <div class="ui-g-4">
+                        <p:commandButton  icon="fa fa-search" action="#{relatorioBean.pesquisarPet()}" ajax="false"/>
+                    </div>
+                    <div class="ui-g-3">
+                        <p:outputLabel value="Proprietario"
+                                       rendered="#{!(relatorioBean.animal.proprietario.nome  == null)}"/>
+                    </div>
+                    <div class="ui-g-9">
+                        <p:outputLabel value="#{relatorioBean.animal.proprietario.nome}"
+                                       rendered="#{!(relatorioBean.animal.proprietario.nome  == null)}"/>
+                    </div>
+                    <div class="ui-g-3">
+                        <p:outputLabel value="Nome do animal"
+                                       rendered="#{!(relatorioBean.animal.nome == null)}"/>
+                    </div>
+                    <div class="ui-g-9">
+                        <p:outputLabel value="#{relatorioBean.animal.nome}"
+                                       rendered="#{!(relatorioBean.animal.nome == null)}"/>
+                    </div>
+                    <div class="ui-g-3">
+                        <p:outputLabel value="Espécie"
+                                       rendered="#{!(relatorioBean.animal.raca.especie.nome == null)}"/>
+                    </div>
+                    <div class="ui-g-9">
+                        <p:outputLabel value="#{relatorioBean.animal.raca.especie.nome}"
+                                       rendered="#{!(relatorioBean.animal.raca.especie.nome == null)}"/>
+                    </div>
+                    <div class="ui-g-3">
+                        <p:outputLabel value="Raça"
+                                       rendered="#{!(relatorioBean.animal.raca.nome == null)}"/>
+                    </div>
+                    <div class="ui-g-9">
+                        <p:outputLabel value="#{relatorioBean.animal.raca.nome}"
+                                       rendered="#{!(relatorioBean.animal.raca.nome == null)}"/>
+                    </div>
+                    <div class="ui-g-3">
+                        <p:outputLabel value="Nascimento"
+                                       rendered="#{!(relatorioBean.animal.nascimento == null)}"/>
+                    </div>
+                    <div class="ui-g-9">
+                        <p:outputLabel value="#{relatorioBean.animal.nascimento}"
+                                       rendered="#{!(relatorioBean.animal.nascimento == null)}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </div>
+                    <div class="ui-g-3">
+                        <p:outputLabel value="Sexo"
+                                       rendered="#{!(relatorioBean.animal.sexo == null)}"/>
+                    </div>
+                    <div class="ui-g-9">
+                        <p:outputLabel value="#{relatorioBean.animal.sexo}"
+                                       rendered="#{!(relatorioBean.animal.sexo == null)}"/>
+                    </div>
+                    <div class="ui-g-3">
+                        <p:outputLabel value="Filhotes"
+                                       rendered="#{!(relatorioBean.animal.filhos == null)}"/>
+                    </div>
+                    <div class="ui-g-9">
+                        <p:outputLabel value="#{relatorioBean.animal.filhos}"
+                                       rendered="#{!(relatorioBean.animal.filhos == null)}"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+
+
+        <div class="ui-g dashboard card ui-fluid">
+            <div class="ui-g-12">
+                <h:form id="form_atendimento">
+
+                    <p:dataTable id="eventsDT"
+                                 var="atendimento"
+                                 value="#{relatorioBean.atendimentos}"
+                                 selectionMode="single"
+                                 selection="#{relatorioBean.atendimento}"
+                                 rowKey="#{atendimento.id}"
+                                 emptyMessage="Nenhum atendimento realizado."
+                                 rows="20"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="10,20,25,50" >
+                        <f:facet name="header">
+                            Atendimentos do(a) #{relatorioBean.animal.nome}
+                        </f:facet>
+                        <p:ajax event="rowSelect" listener="#{relatorioBean.onRowSelect}" oncomplete="PF('dlg').show()" update="form_dialog" />
+                        <!--<p:ajax event="rowUnselect" listener="# {triagemBean.onRowUnselect}" update="form" />-->
+
+                        <p:column filterBy="#{atendimento.id}" sortBy="#{atendimento.id}" headerText="Atendimento">
+                            <h:outputText value="Nº #{atendimento.id}" />
+                        </p:column>
+                        <p:column filterBy="#{atendimento.custo}" sortBy="#{atendimento.custo}" headerText="Custo">
+                            <h:outputText value="R$ #{atendimento.custo}">
+                                <f:convertNumber currencyCode="BRL" locale="pt-BR"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Data" sortBy="#{atendimento.dia}">
+                            <h:outputText value="#{atendimento.dia}" >
+                                <f:convertDateTime locale="pt-BR" pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{atendimento.retorno}" headerText="Retorno">
+                            <h:outputText value="#{atendimento.retorno}" >
+                                <f:convertDateTime locale="pt-BR" pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:form>
+            </div>
+        </div>
+        <div class="ui-g dashboard card ui-fluid">
+            <div class="ui-g-12">
+                <h:form id="form_triagem">
+
+                    <p:dataTable id="table_triagens"
+                                 var="triagem"
+                                 value="#{relatorioBean.triagens}"
+                                 selectionMode="single"
+                                 selection="#{relatorioBean.triagem}"
+                                 rowKey="#{triagem.id}"
+                                 emptyMessage="Nenhuma triagem realizada."
+                                 rows="20"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="10,20,25,50">
+                        <f:facet name="header">
+                            Triagens do(a) #{relatorioBean.animal.nome}
+                        </f:facet>
+
+
+                        <p:column sortBy="#{triagem.dia}" headerText="Data">
+                            <h:outputText value="#{triagem.dia}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column filterBy="#{triagem.peso}" sortBy="#{triagem.peso}" headerText="Peso">
+                            <h:outputText value="#{triagem.peso} Kg"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Patologia">
+                            <h:outputText value="#{triagem.patologia}" />
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:form>
+
+            </div>
+        </div>
+
+        <div class="ui-g dashboard card ui-fluid">
+            <div class="ui-g-12">
+                <h:form id="form_dialog">
+                    <p:dialog header="Procedimentos" widgetVar="dlg" modal="true" height="500" width="">
+                        <p:dataGrid  columns="1"
+                                     var="procedimento"
+                                     value="#{relatorioBean.procedimentosMedicos}"
+                                     emptyMessage="Nenhum procedimento encontrado!">
+
+                            <h:outputText value="Procedimento: #{procedimento.nome}" />
+                            <p:editor value="#{procedimento.descricao}"
+                                      height="450" controls="print" width="500"/>
+
+                        </p:dataGrid>
+                    </p:dialog>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

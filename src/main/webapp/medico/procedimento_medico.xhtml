@@ -1,0 +1,152 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">Procedimento Médico</ui:define>
+
+    <ui:define name="viewname">Procedimento Médico</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#00acac', '#3e96e7'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>
+        </script>
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+            .overflowTexto{
+                max-width: 40ch;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            @media screen and (max-width: 600px) {
+                .overflowTexto{
+                    width: 200px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g dashboard card ui-fluid">
+            <div class="ui-g-12">
+                <h:form id="form">
+                    <p:growl id="msg" showDetail="true"/>
+
+                    <h1>Procedimento Médico</h1>
+
+
+                    <p:dataTable id="eventsDT"
+                                 var="atendimento"
+                                 value="#{procedimentoMedicoBean.atendimentos}"
+                                 selectionMode="single"
+                                 selection="#{procedimentoMedicoBean.atendimento}"
+                                 rowKey="#{atendimento.id}"
+                                 emptyMessage="Nenhum atendimento para hoje."
+                                 rows="20"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="10,20,25,50">
+                        <f:facet name="header">
+                            Selecione um atendimento em andamento
+                        </f:facet>
+                        <p:ajax event="rowSelect" listener="#{procedimentoMedicoBean.onRowSelect}" oncomplete="PF('dlg').show()" update="form" />
+
+                        <p:column filterBy="#{atendimento.id}" headerText="Atendimento">
+                            <h:outputText value="Nº #{atendimento.id}" />
+                        </p:column>
+                        <p:column filterBy="#{atendimento.animal.id}" headerText="Ficha">
+                            <h:outputText value="Nº #{atendimento.animal.id}" />
+                        </p:column>
+                        <p:column filterBy="#{atendimento.animal.nome}" headerText="Nome">
+                            <h:outputText value="#{atendimento.animal.nome}" />
+                        </p:column>
+                        <p:column filterBy="#{atendimento.proprietario.nome}" headerText="Proprietario">
+                            <h:outputText value="#{atendimento.proprietario.nome}" />
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:dialog header="Procedimento Médico do(a) #{procedimentoMedicoBean.atendimento.animal.nome}"
+                              widgetVar="dlg"
+                              modal="true" position="center top">
+                        <p:outputLabel for="nomeProcedimento" value="Nome do procedimento: "/>
+                        <p:inputText id="nomeProcedimento"
+                                     maxlength="100"
+                                     value="#{procedimentoMedicoBean.procedimentoMedico.nome}"
+                                     required="true"/>
+                        <p:commandLink onclick="PF('dlg_retorno').show()">
+                            <p:outputLabel value="Agendar Retorno"/>
+                        </p:commandLink>
+                        <p:editor id="editor"
+                                  widgetVar="editorWidget"
+                                  value="#{procedimentoMedicoBean.procedimentoMedico.descricao}"
+                                  height="450" />
+                        <p:commandButton value="Salvar Procedimento"
+                                         action="#{procedimentoMedicoBean.salvar()}"
+                                         update="form"
+                                         icon="ui-icon-disk"
+                                         ajax="false"/>
+
+                    </p:dialog>
+
+                </h:form>
+
+                <h:form id="form_retorno">
+                    <p:dialog header="Agendameto de retorno"
+                              widgetVar="dlg_retorno"
+                              modal="true">
+                        <p:growl id="msg_retorno" showDetail="true"/>
+                        <p:outputLabel for="retorno" value="Agendar Retorno: "/>
+                        <p:calendar id="retorno"
+                                    value="#{procedimentoMedicoBean.atendimento.retorno}"
+                                    locale="pt_BR"
+                                    navigator="true"
+                                    mindate="#{proprietarioBean.dataCorrente()}"
+                                    yearRange="c:c+10"
+                                    pattern="dd-MMM-yyyy"
+                                    required="true"/>
+
+
+                        <p:commandButton value="Agendar"
+                                         action="#{procedimentoMedicoBean.marcarRetorno()}"
+                                         update="form_retorno:msg_retorno"/>
+                    </p:dialog>
+                </h:form>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

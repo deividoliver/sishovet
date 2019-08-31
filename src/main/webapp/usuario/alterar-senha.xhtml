@@ -1,0 +1,130 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">Alterar Senha</ui:define>
+
+    <ui:define name="viewname">Alterar Senha</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#00acac', '#3e96e7'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>  
+        </script>
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+            .overflowTexto{
+                max-width: 40ch;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            @media screen and (max-width: 600px) {
+                .overflowTexto{
+                    width: 200px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g dashboard card ui-fluid">
+            <div class="ui-g-12">
+                <h1>Alterar Senha</h1>
+                <h:form id="form_cadastro_usuario">
+                    <p:growl showDetail="true"/>
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-3">
+                            <p:outputLabel for="pwd" value="Senha Corrente"/>
+                        </div>
+                        <div class="ui-g-9">
+                            <p:password id="pwd" 
+                                        value="#{usuarioBean.senhaCorrente}" 
+                                        label="Senha corrente" 
+                                        required="true" 
+                                        feedback="true"
+                                        promptLabel="Insira a senha" 
+                                        weakLabel="Fraco"
+                                        goodLabel="Bom" 
+                                        strongLabel="Excelente"/>
+                        </div>
+
+
+                        <div class="ui-g-3">
+                            <p:outputLabel for="pwd1" value="Nova Senha"/>   
+                        </div>
+                        <div class="ui-g-9">
+                            <p:password id="pwd1" 
+                                        value="#{usuarioBean.newSenha}" 
+                                        match="pwd2" 
+                                        label="Nova Senha" 
+                                        required="true" 
+                                        feedback="true"
+                                        promptLabel="Insira a senha" 
+                                        weakLabel="Fraco"
+                                        goodLabel="Bom" 
+                                        strongLabel="Excelente"/>
+                        </div>
+                        <div class="ui-g-3">
+                            <p:outputLabel for="pwd2" value="Confirmar Senha"/>   
+                        </div> 
+                        <div class="ui-g-9">
+                            <p:password id="pwd2" 
+                                        value="#{usuarioBean.senhaDeConfirmacao}" 
+                                        label="Confirmar Nova Senha" 
+                                        required="true" 
+                                        feedback="true"
+                                        promptLabel="Insira a senha" 
+                                        weakLabel="Fraco"
+                                        goodLabel="Bom" 
+                                        strongLabel="Excelente"/>
+                        </div>
+                        <div class="ui-g-6">
+                            <p:commandButton value="Salvar" action="#{usuarioBean.alterarSenha()}" ajax="false"/>
+                        </div>
+                        <div class="ui-g-6">
+                            <p:button value="Cancelar" styleClass="pink-btn" outcome="#{menuBean.irInicio()}"/>
+                        </div> 
+
+
+                    </div>
+
+                </h:form>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

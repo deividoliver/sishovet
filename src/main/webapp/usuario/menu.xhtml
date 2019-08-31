@@ -1,0 +1,56 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pp="http://primefaces.org/poseidon">
+
+    <h:form id="menuform">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+        <div class="layout-menu-container">
+            <div class="nano">
+                <div class="nano-content menu-scroll-content">
+                    <pp:menu widgetVar="me">
+                        <p:menuitem id="om_dashboard" value="Inicio" icon="fa fa-fw fa-home" ajax="false" outcome="#{menuBean.irInicio()}"/>
+
+                        <p:submenu id="id_usuario" label="Usuário" rendered="#{loginBean.administrador or loginBean.secretaria}" icon="fa fa-fw fa fa-user">
+                            <p:menuitem id="id_usuario_cadastro" value="Cadastro" icon="fa fa-plus-square-o" ajax="false"  outcome="#{menuBean.irCadastroUsuario()}"/>
+                            <p:menuitem id="id_usuario_Alterar_Perfil" rendered="#{loginBean.administrador}" value="Listar" icon="fa fa-list-alt" ajax="false" outcome="#{menuBean.irAlterarPerfil()}"/>
+                            <p:menuitem id="id_usuario_Habilitar_Desabilitar" rendered="#{loginBean.administrador}" value="Habilitar/Desabilitar" icon="fa fa-fw fa fa-address-card" ajax="false" outcome="#{menuBean.irHabilitarDesabilitarPerfil()}"/>
+                        </p:submenu>
+
+                        <p:submenu id="id_animal" label="Animal"  rendered="#{loginBean.administrador or loginBean.secretaria}" icon="fa fa-fw fa fa-paw">
+                            <p:menuitem id="id_animal_cadastro" value="Cadastro" icon="fa fa-plus-square-o" ajax="false" outcome="#{menuBean.irCadastroAnimal()}"/>
+                            <p:menuitem id="id_animal_lista" value="Listar" icon="fa fa-list-alt" ajax="false" outcome="#{menuBean.irListaPet()}"/>
+                            <p:menuitem id="id_animal_atendimento" value="Atendimento" icon="fa fa-address-book" ajax="false" outcome="#{menuBean.irAtendimento()}"/>
+                        </p:submenu>
+
+                        <p:submenu id="id_proprietario" label="Proprietário"  rendered="#{loginBean.administrador or loginBean.secretaria}" icon="fa fa-fw fa fa-male">
+                            <p:menuitem id="id_proprietario_cadastro" value="Cadastro" icon="fa fa-plus-square-o" ajax="false" outcome="#{menuBean.irCadastroProprietario()}"/>
+                            <p:menuitem id="id_proprietario_lista"  value="Listar" icon="fa fa-list-alt" ajax="false" outcome="#{menuBean.irListaProprietario()}"/>
+                        </p:submenu>
+
+                        <p:submenu id="id_relatorio" label="Relatório" icon="fa fa-fw fa-file">
+                            <p:menuitem id="id_relatorio_ficha_animal" value="Ficha do Animal" icon="fa fa-id-card" ajax="false" outcome="#{menuBean.irRelatorioFichaPet()}"/>
+                        </p:submenu>
+
+                        <p:submenu id="id_especies_e_racas"  rendered="#{loginBean.administrador or loginBean.secretaria}" label="Espécies e Raças" icon="fa fa-fw fa-database">
+                            <p:menuitem id="id_cadastro_especie" value="Cadastro de Espécie" icon="fa fa-plus-square-o" ajax="false" outcome="#{menuBean.irCadastroEspecie()}"/>
+                            <p:menuitem id="id_cadastro_raca" value="Cadastro de Raça" icon="fa fa-plus-square-o" ajax="false" outcome="#{menuBean.irCadastroRaca()}"/>
+                            <p:menuitem id="id_listar_especie" value="Listar Espécies" icon="fa fa-list-alt" ajax="false" outcome="#{menuBean.irListarEspecie()}"/>
+                            <p:menuitem id="id_listar_raca" value="Listar Raças" icon="fa fa-list-alt" ajax="false" outcome="#{menuBean.irListarRaca()}"/>
+                        </p:submenu>
+
+                        <p:submenu id="id_atendimento" rendered="#{loginBean.medico}" label="Atendimento" icon="fa fa-fw fa fa-user-md">
+                            <p:menuitem id="id_animal_triagem" value="Triagem" icon="fa fa-balance-scale" ajax="false" outcome="#{menuBean.irTriagem()}"/>
+                            <p:menuitem id="id_animal_procedimento_medico" value="Procedimento Médico" icon="fa fa-plus" ajax="false" outcome="#{menuBean.irProcedimentoMedico()}"/>
+                        </p:submenu>
+
+                    </pp:menu>
+                </div>
+            </div>
+        </div>
+    </h:form>
+</ui:composition>

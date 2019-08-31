@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">Lista de atendimento</ui:define>
+
+    <ui:define name="viewname">Lista de atendimento</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#00acac', '#3e96e7'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>  
+        </script>
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+            .overflowTexto{
+                max-width: 40ch;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            @media screen and (max-width: 600px) {
+                .overflowTexto{
+                    width: 200px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g dashboard card ui-fluid">
+            <div class="ui-g-12">
+                <h:form id="listaDeAtendimentos">
+                    <p:dataTable 
+                        id="tableAtendimentos"
+                        var="atendimento" 
+                        value="#{triagemBean.atendimentos}" 
+                        reflow="true"
+                        rowKey="#{atendimento.id}" 
+                        paginator="true" rows="10">
+                        <p:column headerText="Nº">
+                            <h:outputText value="#{atendimento.id}" />
+                        </p:column>
+
+                        <p:column headerText="Dia">
+                            <h:outputText value="#{atendimento.dia}" >
+                            <f:convertDateTime pattern = "dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Retorno">
+                            <h:outputText value="#{atendimento.retorno}">
+                            <f:convertDateTime pattern = "dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Pet">
+                            <h:outputText value="#{atendimento.animal.nome}" />
+                        </p:column>
+
+                        <p:column headerText="Dono">
+                            <h:outputText value="#{atendimento.proprietario.nome}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

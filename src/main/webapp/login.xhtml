@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Sistema Hovet</title>
+        <link rel="icon" type="image/jpg" href="resources/poseidon-layout/images/login/logo-hovet.jpg" />
+        <link rel="stylesheet" type="text/css" href="resources/poseidon-layout/css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="resources/poseidon-layout/css/style1.css" />
+        <script type="text/javascript" src="resources/poseidon-layout/js/modernizr.custom.86080.js"></script>
+    </h:head>
+
+    <h:body styleClass="login-body">
+
+        <ul class="cb-slideshow">
+            <li><span>Image 01</span></li>
+            <li><span>Image 02</span></li>
+            <li><span>Image 03</span></li>
+            <li><span>Image 04</span></li>
+            <li><span>Image 05</span></li>
+            <li><span>Image 06</span></li>
+        </ul>
+
+        <div class="login-panel ui-fluid">
+            <div class="ui-g">
+                <div class="ui-g-12 logo-container">
+                    <p:graphicImage name="images/login/logo-hovet.jpg" style="width: 90px; border-radius: 25px" library="poseidon-layout" />
+                </div>
+                <form 
+                    id="formLogin"
+                    action="#{request.contextPath}/j_spring_security_check"
+                    method="post">
+                    <h:outputText 
+                        value="E-mail e/ou senha inválidos ou Conta desabilitada"
+                        rendered="#{loginBean.erroAoAutenticar(param)}"
+                        style="color: red; font-size: 1.2em; "/>
+                    <div class="ui-g-12">
+                        <p:inputText id="j_username"
+                                     placeholder="Email" 
+                                     required="true" />
+                    </div>
+                    <div class="ui-g-12">
+                        <p:password id="j_password"
+                                    placeholder="Senha" 
+                                    required="true" 
+                                    feedback="false"/>
+                    </div>
+                    <div class="ui-g-12 button-container">
+                        <p:commandButton 
+                            onclick="#{request.contextPath} / j_spring_security_check;" 
+                            value="Acessar" 
+                            icon="fa fa-user" 
+                            styleClass="turquoise-btn"/>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="poseidon-layout" />
+    </h:body>
+
+</html>

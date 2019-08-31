@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">Listar Raças</ui:define>
+
+    <ui:define name="viewname">Listar Raças</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#00acac', '#3e96e7'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>
+        </script>
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+            .overflowTexto{
+                max-width: 40ch;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            @media screen and (max-width: 600px) {
+                .overflowTexto{
+                    width: 200px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g dashboard card ui-fluid">
+            <div class="ui-g-12">
+                <h:form id="form-listar-racas">
+                    <p:growl id="msg" showDetail="true"/>
+
+                    <h1>Lista de Raças</h1>
+                    <p:dataTable var="raca" value="#{racaBean.racas}"
+                                 reflow="true"
+                                 paginator="true"
+                                 rows="10">
+
+                        <p:column headerText="Nome" filterBy="#{raca.nome}" sortBy="#{raca.nome}">
+                            <h:outputText value="#{raca.nome}" />
+                        </p:column>
+
+                        <p:column headerText="Espécie" filterBy="#{raca.especie.nome}" sortBy="#{raca.especie.nome}">
+                            <h:outputText value="#{raca.especie.nome}" />
+                        </p:column>
+                        <p:column headerText="Operações" style="width: 30%">
+                            <p:commandButton
+                                icon="fa fa-pencil-square"
+                                style="width: 30%"
+                                ajax="false"
+                                value="Editar"
+                                action="#{menuBean.irCadastroRaca()}"
+                                >
+                                <f:setPropertyActionListener
+                                    target="#{racaBean.raca}"
+                                    value="#{raca}"/>
+                            </p:commandButton>
+                        </p:column>
+
+
+
+
+                    </p:dataTable>
+
+
+                </h:form>
+
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

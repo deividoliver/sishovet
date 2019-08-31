@@ -1,0 +1,198 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">Cadastro Animal</ui:define>
+
+    <ui:define name="viewname">Cadastro Animal</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#00acac', '#3e96e7'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>
+        </script>
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+            .overflowTexto{
+                max-width: 40ch;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            @media screen and (max-width: 600px) {
+                .overflowTexto{
+                    width: 200px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g dashboard card ui-fluid">
+            <div class="ui-g-12">
+                <h:form id="form_cadastro_animal">
+                    <h:inputHidden id="idAnimal" value="#{animalBean.animal.id}" />
+
+                    <p:growl id="msgs" showDetail="true" />
+
+                    <p:toolbar>
+
+                        <f:facet name="right">
+                            <p:button value="Ir cadastrar proprietario" href="#{menuBean.irCadastroProprietario()}"/>
+                        </f:facet>
+
+                    </p:toolbar>
+
+                    <p:tabView>
+                        <p:tab title="Cadastro de Animal">
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-6">
+                                    <p:panelGrid
+                                        id="pgCadastroAnimal" columns="2"
+                                        columnClasses="ui-grid-col-3,ui-grid-col-9"
+                                        layout="grid"
+                                        styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;">
+
+                                        <p:outputLabel value="CPF do Proprietario:" for="themePojo" />
+                                        <p:autoComplete id="themePojo"
+                                                        value="#{animalBean.proprietario}"
+                                                        completeMethod="#{animalBean.pesquisarProprietarios}"
+                                                        var="proprietario"
+                                                        itemLabel="#{proprietario.cpf}"
+                                                        itemValue="#{proprietario}"
+                                                        converter="proprietarioConverter"
+                                                        forceSelection="true"
+                                                        minQueryLength="5"
+                                                        maxlength="11"
+                                                        required="true">
+                                            <p:ajax event="itemSelect" listener="#{animalBean.onItemSelect}" update="form_cadastro_animal" />
+
+                                        </p:autoComplete>
+
+
+                                        <p:outputLabel for="nomeProp" value="Nome do proprietario"/>
+                                        <p:inputText id="nomeProp" value="#{animalBean.proprietario.nome}" readonly="true"/>
+
+                                        <p:outputLabel for="itAnimalNome" value="Nome:"/>
+                                        <p:inputText id="itAnimalNome" value="#{animalBean.animal.nome}" required="true"/>
+
+                                        <p:outputLabel for="somAnimalSexo" value="Sexo:"/>
+                                        <p:selectOneMenu
+                                            id="somAnimalSexo"
+                                            value="#{animalBean.animal.sexo}"
+                                            required="true"
+                                            requiredMessage="Informe o sexo do animal!">
+                                            <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
+                                            <f:selectItems
+                                                var="sa"
+                                                value="#{listasTipoBean.listaTipoSexoAnimal()}"
+                                                itemValue="#{sa.valor}"
+                                                itemLabel="#{sa.descricao}"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel id="labelFilhos"
+                                                       for="spFilhos"
+                                                       value="Filhos: "/>
+                                        <p:spinner id="spFilhos"
+                                                   value="#{animalBean.animal.filhos}"
+                                                   min="0"
+                                                   max="11"/>
+
+                                        <p:outputLabel for="somAnimalCastrado" value="Castrado?:"/>
+                                        <p:selectBooleanButton id="somAnimalCastrado" value="#{animalBean.animal.castrado}" onLabel="Sim" offLabel="Não" style="width:60px" />
+
+                                        <p:outputLabel for="imAnimalNascimento" value="Nascimento: " />
+                                        <p:calendar id="imAnimalNascimento"
+                                                    value="#{animalBean.animal.nascimento}"
+                                                    locale="pt_BR"
+                                                    navigator="true"
+                                                    maxdate="#{proprietarioBean.dataCorrente()}"
+                                                    yearRange="c-150:c"
+                                                    pattern="dd-MMM-yyyy"/>
+
+                                        <p:outputLabel for="especie" value="Espécie: " />
+                                        <p:selectOneMenu id="especie"
+                                                         converter="especieConverter"
+                                                         value="#{animalBean.especie}"
+                                                         filter="true"
+                                                         filterMatchMode="startsWith"
+                                                         required="true">
+                                            <p:ajax listener="#{animalBean.obterRacas()}" update="raca" />
+                                            <f:selectItem itemLabel="Selecione uma especie" itemValue="" noSelectionOption="true" />
+                                            <f:selectItems value="#{animalBean.especies}" var="especie" itemLabel="#{especie.nome}" itemValue="#{especie}" />
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel for="raca" value="Raça: " />
+                                        <p:selectOneMenu id="raca"
+                                                         converter="racaConverter"
+                                                         value="#{animalBean.animal.raca}"
+                                                         filter="true"
+                                                         filterMatchMode="startsWith"
+                                                         required="true">
+                                            <f:selectItem itemLabel="Selecione uma raça" itemValue="" noSelectionOption="true" />
+                                            <f:selectItems value="#{animalBean.racas}" var="raca" itemLabel="#{raca.nome}" itemValue="#{raca}"/>
+                                        </p:selectOneMenu>
+                                        <p:spacer/>
+                                        <p:commandButton value="Salvar" action="#{animalBean.salvar()}" ajax="false"/>
+                                    </p:panelGrid>
+                                </div>
+                                <div class="ui-g-12 ui-md-6 ui-g-nopad">
+                                    <p:panel header="Ficha do(a) #{animalBean.animal.nome} gerada" rendered="#{animalBean.animal.id !=null}"  >
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <center>
+                                            <p:outputLabel value="#{animalBean.animal.id}" style="font-size: 50px"/>
+                                        </center>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                    </p:panel>
+                                </div>
+                                <div class="ui-g-12">
+
+                                </div>
+                            </div>
+
+                        </p:tab>
+                    </p:tabView>
+                </h:form>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

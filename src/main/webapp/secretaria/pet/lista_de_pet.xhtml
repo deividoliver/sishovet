@@ -1,0 +1,134 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">Lista de Pets</ui:define>
+
+    <ui:define name="viewname">Lista de Pets</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#00acac', '#3e96e7'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>
+        </script>
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+            .overflowTexto{
+                max-width: 40ch;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            @media screen and (max-width: 600px) {
+                .overflowTexto{
+                    width: 200px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g dashboard card ui-fluid">
+
+            <div class="ui-g-12">
+                <h:form id="form-find-pets">
+                    <p:growl showDetail="true"/>
+
+                    <div class="ui-g-8">
+                        <div class="ui-g-2">
+                            <p:outputLabel value="CPF do proprietário:"/>
+                        </div>
+                        <div class="ui-g-4">
+                            <p:inputText value="#{animalBean.cpfProprietario}" placeholder="99999999999" maxlength="11" />
+                        </div>
+                        <div class="ui-g-1">
+                            <p:commandButton  icon="fa fa-search" action="#{animalBean.findAnimaisProp()}" ajax="false"/>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+            <br/>
+            <div class="ui-g-12">
+                <h:form id="form-lista-pet">
+                    <p:dataTable
+                        var="pet"
+                        value="${animalBean.animais}"
+                        paginator="true" rows="10">
+                        <p:column headerText="Ficha" sortBy="#{pet.id}" filterBy="#{pet.id}">
+                            <h:outputText value="#{pet.id}" />
+                        </p:column>
+
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{pet.nome}" />
+                        </p:column>
+
+                        <p:column headerText="Raça">
+                            <h:outputText value="#{pet.raca.nome}" />
+                        </p:column>
+
+                        <p:column headerText="Nascimento">
+                            <h:outputText value="#{pet.nascimento}" >
+                                <f:convertDateTime pattern = "dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Sexo">
+                            <h:outputText value="#{pet.sexo}" />
+                        </p:column>
+
+                        <p:column headerText="Dono" sortBy="#{pet.proprietario.nome}" filterBy="#{pet.proprietario.nome}">
+                            <h:outputText value="#{pet.proprietario.nome}" />
+                        </p:column>
+
+                        <p:column headerText="Operações">
+
+                            <p:button
+                                icon="fa fa-pencil-square"
+                                title="Editar"
+                                value="Editar"
+                                outcome="#{menuBean.irCadastroAnimal()}">
+                                <f:param name="f" value="#{pet.id}"/>
+                            </p:button>
+
+                        </p:column>
+
+                    </p:dataTable>
+                </h:form>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

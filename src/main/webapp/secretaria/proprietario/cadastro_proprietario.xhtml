@@ -1,0 +1,151 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">Cadastro de Proprietário</ui:define>
+
+    <ui:define name="viewname">Cadastro de Proprietário</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#00acac', '#3e96e7'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>
+        </script>
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+            .overflowTexto{
+                max-width: 40ch;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            @media screen and (max-width: 600px) {
+                .overflowTexto{
+                    width: 200px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g dashboard card ui-fluid">
+            <div class="ui-g-12">
+                <h:form id="cad_propietario">
+
+                    <p:growl showDetail="true"/>
+
+                    <p:toolbar>
+
+                        <f:facet name="right">
+                            <p:button value="Ir cadastrar pet" href="#{menuBean.irCadastroAnimal()}"/>
+                        </f:facet>
+
+                    </p:toolbar>
+
+                    <p:tabView>
+                        <p:tab title="Proprietário">
+                            <h:inputHidden id="idProprietario" value="#{proprietarioBean.proprietario.id}" />
+                            <p:panelGrid
+                                id="pgCadastroProprietario"
+                                columns="2"
+                                layout="grid"
+                                style="width: 600px"
+                                columnClasses="ui-grid-col-2,ui-grid-col-10"
+                                styleClass="ui-panelgrid-blank form-group">
+
+                                <p:outputLabel for="imCpfProprietario" value="CPF"/>
+                                <p:inputMask id="imCpfProprietario"
+                                             value="#{proprietarioBean.proprietario.cpf}"
+                                             mask="999.999.999-99" required="true" >
+                                    <p:ajax event="blur"  listener="#{proprietarioBean.obterProprietario()}" update="cad_propietario" />
+                                </p:inputMask>
+
+                                <p:outputLabel for="itNomeProprietario" value="Nome:"/>
+                                <p:inputText id="itNomeProprietario" value="#{proprietarioBean.proprietario.nome}" required="true"/>
+
+                                <p:outputLabel for="imTelefoneDoisProprietario" value="Celular:"/>
+                                <p:inputMask id="imTelefoneDoisProprietario"
+                                             value="#{proprietarioBean.proprietario.telefone1}"
+                                             required="true" mask="(99)99999-9999"/>
+
+                                <p:outputLabel for="imTelefoneUmProprietario" value="Residencial:"/>
+                                <p:inputMask id="imTelefoneUmProprietario"
+                                             value="#{proprietarioBean.proprietario.telefone2}"
+                                             mask="9999-9999" required="false"/>
+
+                                <p:outputLabel for="itEmailProprietario" value="Email:"/>
+                                <p:inputText type="email" id="itEmailProprietario"
+                                             value="#{proprietarioBean.proprietario.email}" required="false"/>
+
+                                <p:outputLabel for="itRgProprietario" value="RG"/>
+                                <p:inputText id="itRgProprietario" value="#{proprietarioBean.proprietario.rg}" maxlength="7" required="true"/>
+
+                                <p:outputLabel for="imProprietarioNascimento" value="Nascimento: " />
+                                <p:calendar id="imProprietarioNascimento"
+                                            value="#{proprietarioBean.proprietario.nascimento}"
+                                            locale="pt_BR"
+                                            navigator="true"
+                                            maxdate="#{proprietarioBean.dataCorrente()}"
+                                            yearRange="c-100:c"
+                                            pattern="dd-MMM-yyyy"
+                                            required="true"/>
+
+                                <p:outputLabel for="imProprietarioCep" value="CEP"/>
+                                <p:inputMask id="imProprietarioCep"
+                                             value="#{proprietarioBean.proprietario.cep}"
+                                             mask="99999-999" required="true"/>
+
+                                <p:outputLabel for="imProprietarioEndereco" value="Endereco:"/>
+                                <p:inputText id="imProprietarioEndereco" value="#{proprietarioBean.proprietario.endereco}" required="true"/>
+
+                                <p:outputLabel for="imProprietarioNumero" value="Número:"/>
+                                <p:inputText id="imProprietarioNumero" value="#{proprietarioBean.proprietario.numero}" required="true"/>
+
+                                <p:outputLabel for="imProprietarioComplemento" value="Complemento:"/>
+                                <p:inputText id="imProprietarioComplemento" value="#{proprietarioBean.proprietario.complemento}" required="true"/>
+                                <p:spacer/>
+                                <p:commandButton value="Salvar" action="#{proprietarioBean.salvar()}" ajax="false"/>
+                            </p:panelGrid>
+
+                        </p:tab>
+                    </p:tabView>
+
+                </h:form>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>
