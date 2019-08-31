@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/deividoliver/sishovet/blob/master/src/main/webapp/resources/poseidon-layout/images/login/logo-hovet.jpg" alt="SisHovet Logo" Style:"width: 300px; heigth: 300px">
+  <img src="https://github.com/deividoliver/sishovet/blob/master/src/main/webapp/resources/poseidon-layout/images/login/logo-hovet.jpg" alt="SisHovet Logo" style="max-width:25%;">
 </p>
 
 # SisHovet
