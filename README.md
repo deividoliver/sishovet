@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="https://github.com/deividoliver/sishovet/src/main/webapp/resources/poseidon-layout/images/login/logo-hovet.jpg" alt="SisHovet Logo" Style:"width: 300px; heigth: 300px">
+  <img src="https://github.com/deividoliver/sishovet/blob/master/src/main/webapp/resources/poseidon-layout/images/login/logo-hovet.jpg" alt="SisHovet Logo" Style:"width: 300px; heigth: 300px">
 </p>
 
-# sishovet
+# SisHovet
 Este repositório contém um software de gerenciamento do Hospital Veterinário da UFRA(Universidade Federal Rural da Amazônia), desenvolvido por alunos da própria instituição.
 
 # Linguagem
